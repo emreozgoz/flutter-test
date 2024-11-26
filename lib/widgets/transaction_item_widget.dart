@@ -16,7 +16,7 @@ class TransactionItemWidget extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: transaction.color.withOpacity(0.1),
-          child: Icon(transaction.icon, color: transaction.color),
+            child: Icon(transaction.categoryIcon, color: transaction.color),
         ),
         title: Text(transaction.title),
         // subtitle: Text(dateti('yyyy-MM-dd').format(transaction.date)),
