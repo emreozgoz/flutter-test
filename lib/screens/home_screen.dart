@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_test_/widgets/expense_dialog.dart';
+import 'package:flutter_test_/widgets/line_chart_widget.dart';
 import 'package:flutter_test_/widgets/transaction_item.dart';
 
 void main() {
@@ -25,15 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
   List<TransactionItem> transactions = [];
   double totalIncome = 0.0;
   double totalExpense = 0.0;
-
+  List<double> dataList = [10, 20, 30, 40, 50]; // Example data list
+  double maxY = 150.0; // Maximum Y value for the chart
   // Harcama ekleme fonksiyonu
   void _addTransaction(TransactionItem transaction) {
     setState(() {
       transactions.add(transaction);
       // Gelir veya gider türüne göre toplamları güncelle
-      if (transaction.type == true) { //True Gelirse bu bir Giderdir
+      if (transaction.type) {
         totalExpense += transaction.amount;
-      } else if (transaction.type == false) {
+      } else {
         totalIncome += transaction.amount;
       }
     });
@@ -94,43 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Gelir ve Gider Takibi')),
       body: Column(
-        children: [
-          // Grafik kısmı
+       children: [
+          // Add the AppLineChart widget here
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: AspectRatio(
-              aspectRatio: 1.5,
-              child: BarChart(
-                BarChartData(
-                  backgroundColor: Colors.blue.withOpacity(0.2), // Arka plan rengi
-                  gridData: FlGridData(show: false),
-                  titlesData: FlTitlesData(show: false),
-                  borderData: FlBorderData(show: false),
-                  barGroups: [
-                    BarChartGroupData(
-                      x: 0,
-                      barRods: [
-                        BarChartRodData(
-                          toY: totalIncome,
-                          color: Colors.green,
-                          width: 20,
-                          borderRadius: BorderRadius.zero,
-                        ),
-                        BarChartRodData(
-                          toY: totalExpense,
-                          color: Colors.red,
-                          width: 20,
-                          borderRadius: BorderRadius.zero,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            padding: const EdgeInsets.all(9.0),
+            child: AppLineChart(
+              dataList: dataList, // Provide the data list
+              maxY: maxY, // Provide the max Y value
             ),
           ),
-
-          // Harcamalar Listesi
+          // Grafik kısmı
           Expanded(
             child: ListView.builder(
               itemCount: transactions.length,

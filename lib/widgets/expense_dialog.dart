@@ -21,33 +21,67 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Harcama Ekle'),
+      backgroundColor: Color(0xFFBBDEFB), // Mavi arka plan
+      title: Text(
+        'Harcama Ekle',
+        style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.bold), // Gri yazı
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Kategori Seçimi
-          DropdownButton<String>(
-            value: _category,
-            onChanged: (newCategory) {
-              setState(() {
-                _category = newCategory!;
-              });
-            },
-            items: _categories.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+       DropdownButton<String>(
+  value: _category,
+  onChanged: (newCategory) {
+    setState(() {
+      _category = newCategory!;
+    });
+  },
+  items: _categories.map<DropdownMenuItem<String>>((String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+        child: Text(
+          value,
+          style: TextStyle(
+            color: Color(0xFF333333), // Daha soft gri yazı rengi
+            fontSize: 16.0, // Yazı boyutunu hafif büyütün
           ),
+        ),
+      ),
+    );
+  }).toList(),
+  dropdownColor: Color(0xFFE3F2FD), // Daha açık pastel mavi
+  icon: Icon(Icons.arrow_drop_down, color: Color(0xFF333333)), // Soft ok ikonu
+  style: TextStyle(
+    color: Color(0xFF333333), // Ana metin rengi
+    fontSize: 16.0,
+  ),
+  underline: Container(
+    height: 2,
+    color: Color(0xFFBBDEFB), // Soft mavi alt çizgi
+  ),
+  borderRadius: BorderRadius.circular(10), // Yuvarlatılmış kenarlar
+);
+
           // Tutar Girişi
           TextField(
             controller: _amountController,
-            decoration: InputDecoration(labelText: 'Harcama Tutarı'),
+            decoration: InputDecoration(
+              labelText: 'Harcama Tutarı',
+              labelStyle: TextStyle(color: Color(0xFF333333)), // Gri yazı
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF333333)), // Gri alt çizgi
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF333333)), // Gri alt çizgi
+              ),
+            ),
             keyboardType: TextInputType.number,
+            style: TextStyle(color: Color(0xFF333333)), // Gri yazı
             onChanged: (value) {
               setState(() {
-                // Girilen değeri double olarak al ve hata olursa 0.0 yap
                 _amount = double.tryParse(value) ?? 0.0;
               });
             },
@@ -58,14 +92,16 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
         // İptal Butonu
         TextButton(
           onPressed: () {
-            Navigator.pop(context); // Popup'ı kapat
+            Navigator.pop(context);
           },
-          child: Text('İptal'),
+          child: Text(
+            'İptal',
+            style: TextStyle(color: Color(0xFF333333)), // Gri yazı
+          ),
         ),
         // Ekle Butonu
         TextButton(
           onPressed: () {
-            // Eğer tutar 0 veya boşsa ekleme yapılmasın
             if (_amount <= 0) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Geçerli bir tutar girin')),
@@ -74,19 +110,22 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
             }
 
             final transaction = TransactionItem(
-              icon: Icons.money,  // Harcama için bir ikon
-              title: '$_category Harcaması',  // Kategoriyi başlık olarak kullan
-              category: _category,  // Kategori
+              icon: Icons.money, // Harcama için bir ikon
+              title: '$_category Harcaması', // Kategoriyi başlık olarak kullan
+              category: _category, // Kategori
               type: _type,
-              date: DateTime.now().toString(),  // Geçerli tarih
-              amount: _amount,  // Tutar, iki ondalıklı
-              color: Colors.blue,  // Renk
+              date: DateTime.now().toString(), // Geçerli tarih
+              amount: _amount, // Tutar
+              color: Color(0xFF333333), // Çizgi rengi ile uyumlu gri renk
             );
 
-            widget.onSave(transaction); // Harcamayı kaydet
-            Navigator.pop(context); // Popup'ı kapat
+            widget.onSave(transaction);
+            Navigator.pop(context);
           },
-          child: Text('Ekle'),
+          child: Text(
+            'Ekle',
+            style: TextStyle(color: Color(0xFF333333)), // Gri yazı
+          ),
         ),
       ],
     );
